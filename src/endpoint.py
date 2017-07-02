@@ -1,9 +1,9 @@
 try:
-    from calculations import *
+    import calculations as calc
     from operation import Operation
     from inmemorystorage import InMemoryStorage
 except:
-    from src.calculations import *
+    import src.calculations as calc
     from src.operation import Operation
     from src.inmemorystorage import InMemoryStorage
 from flask import Flask, Response
@@ -14,25 +14,28 @@ import uuid
 app = Flask(__name__)
 app.config['STORAGE'] = InMemoryStorage()
 
-@app.route("/execute/<operand1>/<calculation>/<operand2>")
-def execute(operand1, calculation, operand2):
-    op1, op2 = float(operand1), float(operand2)
-
-    if calculation == "addition":
-        result = add(op1, op2)
-    elif calculation == "subtraction":
-        result = subtract(op1, op2)
-    elif calculation == "multiplication":
-        result = multiply(op1, op2)
-    elif calculation == "division":
-        result = divide(op1, op2)
-    else:
-        raise Exception('calculation not recognized (' + calculation + ')')
-
-    operation = Operation(op1, op2, calculation, result, time(), uuid.uuid4())
+def handle(calculationFunc, operand1, operand2, calculationName):
+    result = calculationFunc(operand1, operand2)
+    operation = Operation(operand1, operand2, calculationName, result, time(), uuid.uuid4())
     app.config['STORAGE'].persist(operation)
 
     return Response(str(result), mimetype='text/plain')
+
+@app.route("/add/<operand1>/<operand2>")
+def add(operand1, operand2):
+    return handle(calc.add, float(operand1), float(operand2), 'addition')
+
+@app.route("/subtract/<operand1>/<operand2>")
+def subtract(operand1, operand2):
+    return handle(calc.subtract, float(operand1), float(operand2), 'subtraction')
+
+@app.route("/multiply/<operand1>/<operand2>")
+def multiply(operand1, operand2):
+    return handle(calc.multiply, float(operand1), float(operand2), 'multiplication')
+
+@app.route("/divide/<operand1>/<operand2>")
+def divide(operand1, operand2):
+    return handle(calc.divide, float(operand1), float(operand2), 'division')
 
 @app.route("/history")
 def get_history():
