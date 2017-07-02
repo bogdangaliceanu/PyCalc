@@ -1,5 +1,6 @@
 import pickle
 import os
+import shutil
 
 class FileStorage:
 
@@ -19,3 +20,7 @@ class FileStorage:
     def retrieve_all(self):
         uids = os.listdir(self.path)
         return list(map(self.retrieve, uids))
+
+    def clear(self):
+        for f in os.listdir(self.path):
+            os.remove(f)
