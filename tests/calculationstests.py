@@ -4,10 +4,10 @@ from src.calculations import *
 class CalculationsTests(TestCase):
 
     def test_addition_zero(self):
-        self.assertEqual(add(2, 0), 2)
+        self.assertEqual(2, add(2, 0))
 
     def test_addition_numbers(self):
-        self.assertEqual(add(2, 5), 7)
+        self.assertEqual(7, add(2, 5))
 
     def test_division_by_zero(self):
         self.assertRaises(ZeroDivisionError, divide, 2, 0)
@@ -16,16 +16,16 @@ class CalculationsTests(TestCase):
         self.assertEqual(2.5, divide(5, 2))
 
     def test_subtraction_zero_left(self):
-        self.assertEqual(subtract(0, 2), -2)
+        self.assertEqual(-2, subtract(0, 2))
 
     def test_subtraction_zero_right(self):
-        self.assertEqual(subtract(2, 0), 2)
+        self.assertEqual(2, subtract(2, 0))
 
     def test_subtraction_numbers(self):
-        self.assertEqual(subtract(5, 2), 3)
+        self.assertEqual(3, subtract(5, 2))
 
     def test_multiplication_zero(self):
-        self.assertEqual(multiply(2, 0), 0)
+        self.assertEqual(0, multiply(2, 0))
 
     def test_multiplication_numbers(self):
-        self.assertEqual(multiply(2, 5), 10)
+        self.assertEqual(10, multiply(2, 5))

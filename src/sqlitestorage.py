@@ -8,13 +8,13 @@ class SqliteStorage:
     def persist(self, operation):
         with sqlite3.connect(self._dbname) as conn:
             c = conn.cursor()
-            c.execute("CREATE TABLE IF NOT EXISTS operations (uid GUID PRIMARY KEY, operand1 REAL, operand2 REAL, kind TEXT, result REAL, timestamp REAL)")
+            c.execute("CREATE TABLE IF NOT EXISTS operations (uid GUID PRIMARY KEY, operand1 REAL, operand2 REAL, calculation TEXT, result REAL, timestamp REAL)")
             c.execute(
                 "INSERT INTO operations VALUES ('"
                     + str(operation.uid) + "', "
                     + str(operation.operand1) + ", "
                     + str(operation.operand2) + ", '"
-                    + operation.kind + "', "
+                    + operation.calculation + "', "
                     + str(operation.result) + ", "
                     + str(operation.timestamp) +
                 ")"
