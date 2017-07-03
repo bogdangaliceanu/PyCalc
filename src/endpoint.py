@@ -1,22 +1,17 @@
-try:
-    import calculations as calc
-    from operation import Operation
-    from inmemorystorage import InMemoryStorage
-except:
-    import src.calculations as calc
-    from src.operation import Operation
-    from src.inmemorystorage import InMemoryStorage
-from flask import Flask, Response
 from time import time
 import json
 import uuid
+from flask import Flask, Response
+from . import calculations as calc
+from .operation import Operation
+from .inmemorystorage import InMemoryStorage
 
 app = Flask(__name__)
 app.config['STORAGE'] = InMemoryStorage()
 
-def handle(calculationFunc, operand1, operand2, calculationName):
-    result = calculationFunc(operand1, operand2)
-    operation = Operation(operand1, operand2, calculationName, result, time(), uuid.uuid4())
+def handle(calculation_func, operand1, operand2, calculation_name):
+    result = calculation_func(operand1, operand2)
+    operation = Operation(operand1, operand2, calculation_name, result, time(), uuid.uuid4())
     app.config['STORAGE'].persist(operation)
 
     return Response(str(result), mimetype='text/plain')
@@ -57,6 +52,3 @@ def get_history():
 def clear_history():
     app.config['STORAGE'].clear()
     return Response(status=200)
-
-if __name__ == "__main__":
-    app.run()
